@@ -1,0 +1,28 @@
+{
+  "release_version": "3.1.0",
+  "generated_at": "2026-10-21T20:45:00Z",
+  "environment": "production",
+  "active_model_key": "xgboost",
+  "decision_threshold": 0.3236,
+  "artifacts": {
+    "Models/churn_model.pkl": {
+      "description": "Active production scikit-learn pipeline (XGBoost classifier with CV threshold 0.3236)",
+      "sha256": "a9f0053a700de50daab7c453f4bd690d7cd09ad0c10927240234a4895d791363",
+      "size_bytes": 241585,
+      "format": "pickle/joblib"
+    },
+    "Models/churn_models.joblib": {
+      "description": "Canonical multi-model bundle (Logistic Regression, Decision Tree, Random Forest, XGBoost)",
+      "sha256": "1761ab2f40364510bbe39a11859cc09cc979c31f5ce94c6293eca7e55acbddea",
+      "size_bytes": 4811267,
+      "format": "joblib"
+    }
+  },
+  "metrics_summary": {
+    "roc_auc": 0.8449,
+    "f1_score": 0.6389,
+    "recall": 0.7781,
+    "precision": 0.5419,
+    "brier_score": 0.1378
+  }
+}

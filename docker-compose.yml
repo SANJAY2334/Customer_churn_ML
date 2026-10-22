@@ -1,0 +1,73 @@
+services:
+  flask_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: churn_flask_api
+    command: ["gunicorn", "--workers=4", "--threads=2", "--worker-class=gthread", "--bind=0.0.0.0:5000", "--access-logfile=-", "--error-logfile=-", "flask_app:app"]
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - FLASK_ENV=production
+      - APP_ENV=production
+      - RATE_LIMIT_STORAGE=shared
+      - RATE_LIMIT_DB_PATH=/tmp/telecom_rate_limits.sqlite3
+      - API_AUTH_ENABLED=${API_AUTH_ENABLED:-true}
+      - API_KEY=${API_KEY}
+      - CHURN_API_KEY=${API_KEY}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-60}
+      - ACTIVE_MODEL_KEY=${ACTIVE_MODEL_KEY:-xgboost}
+      - CHURN_DECISION_THRESHOLD=${CHURN_DECISION_THRESHOLD:-0.3236}
+      - MAX_CONTENT_LENGTH=16777216
+    expose:
+      - "5000"
+    networks:
+      - churn_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  streamlit_dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: churn_streamlit_dashboard
+    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.baseUrlPath=/dashboard"]
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - ACTIVE_MODEL_KEY=${ACTIVE_MODEL_KEY:-xgboost}
+      - CHURN_DECISION_THRESHOLD=${CHURN_DECISION_THRESHOLD:-0.3236}
+    expose:
+      - "8501"
+    networks:
+      - churn_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/dashboard/_stcore/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  nginx:
+    image: nginx:alpine
+    container_name: churn_nginx_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - flask_api
+      - streamlit_dashboard
+    networks:
+      - churn_network
+
+networks:
+  churn_network:
+    driver: bridge

@@ -1,0 +1,64 @@
+{
+  "ListenerRules": [
+    {
+      "Priority": 10,
+      "Conditions": [
+        {
+          "Field": "path-pattern",
+          "PathPatternConfig": {
+            "Values": ["/dashboard*"]
+          }
+        }
+      ],
+      "Actions": [
+        {
+          "Type": "forward",
+          "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/tg-churn-streamlit/abc123"
+        }
+      ]
+    },
+    {
+      "Priority": 20,
+      "Conditions": [
+        {
+          "Field": "path-pattern",
+          "PathPatternConfig": {
+            "Values": ["/*"]
+          }
+        }
+      ],
+      "Actions": [
+        {
+          "Type": "forward",
+          "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/tg-churn-flask/def456"
+        }
+      ]
+    }
+  ],
+  "TargetGroupHealthChecks": {
+    "FlaskApi": {
+      "Protocol": "HTTP",
+      "Path": "/api/live",
+      "Port": "5000",
+      "IntervalSeconds": 30,
+      "TimeoutSeconds": 5,
+      "HealthyThresholdCount": 2,
+      "UnhealthyThresholdCount": 3,
+      "Matcher": {
+        "HttpCode": "200"
+      }
+    },
+    "StreamlitDashboard": {
+      "Protocol": "HTTP",
+      "Path": "/dashboard/_stcore/health",
+      "Port": "8501",
+      "IntervalSeconds": 30,
+      "TimeoutSeconds": 5,
+      "HealthyThresholdCount": 2,
+      "UnhealthyThresholdCount": 3,
+      "Matcher": {
+        "HttpCode": "200"
+      }
+    }
+  }
+}

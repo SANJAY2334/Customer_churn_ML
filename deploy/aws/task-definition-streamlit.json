@@ -1,0 +1,54 @@
+{
+  "family": "telecom-churn-streamlit-dashboard",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::123456789012:role/telecom-churn-ecs-execution-role",
+  "taskRoleArn": "arn:aws:iam::123456789012:role/telecom-churn-ecs-task-role",
+  "containerDefinitions": [
+    {
+      "name": "streamlit-dashboard",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/telecom-churn-api:v1.0.0",
+      "essential": true,
+      "command": [
+        "streamlit",
+        "run",
+        "app.py",
+        "--server.port=8501",
+        "--server.address=0.0.0.0",
+        "--server.baseUrlPath=/dashboard"
+      ],
+      "portMappings": [
+        {
+          "containerPort": 8501,
+          "hostPort": 8501,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "ENVIRONMENT", "value": "production"},
+        {"name": "ACTIVE_MODEL_KEY", "value": "xgboost"},
+        {"name": "CHURN_DECISION_THRESHOLD", "value": "0.3236"}
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:8501/dashboard/_stcore/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 15
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/telecom-churn-streamlit-dashboard",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "readonlyRootFilesystem": false,
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ]
+}

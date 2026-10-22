@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnIQ — Telecom Customer Churn Intelligence Platform</title>
+    <meta name="description" content="Enterprise Telecom Customer Churn Intelligence, Risk Attribution, and Retention Simulation Platform powered by Machine Learning.">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Main ChurnIQ Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="churniq-app">
+
+    <!-- Top-Level App Container -->
+    <div class="app-layout">
+
+        <!-- ========================================================================= -->
+        <!-- LEFT SIDEBAR NAVIGATION                                                   -->
+        <!-- ========================================================================= -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <!-- Brand / Logo -->
+                <div class="brand">
+                    <div class="brand-symbol">
+                        <span class="bar bar-1"></span>
+                        <span class="bar bar-2"></span>
+                        <span class="bar bar-3"></span>
+                        <span class="bar bar-4"></span>
+                    </div>
+                    <div class="brand-text">
+                        <h2 class="brand-name">ChurnIQ</h2>
+                        <span class="brand-sub">Telecom Customer Insights</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="nav-menu" aria-label="Main Navigation">
+                    <button class="nav-item active" data-view="overview-view">
+                        <i class="fa-solid fa-shapes nav-icon"></i>
+                        <span class="nav-label">Overview</span>
+                    </button>
+                    <button class="nav-item" data-view="explorer-view">
+                        <i class="fa-solid fa-users nav-icon"></i>
+                        <span class="nav-label">Customer Explorer</span>
+                    </button>
+                    <button class="nav-item" data-view="analysis-view">
+                        <i class="fa-solid fa-chart-pie nav-icon"></i>
+                        <span class="nav-label">Customer Analysis</span>
+                    </button>
+                    <button class="nav-item" data-view="batch-view">
+                        <i class="fa-solid fa-table-cells-large nav-icon"></i>
+                        <span class="nav-label">Batch Intelligence</span>
+                    </button>
+                    <button class="nav-item" data-view="simulator-view">
+                        <i class="fa-solid fa-sliders nav-icon"></i>
+                        <span class="nav-label">Retention Simulator</span>
+                    </button>
+                    <button class="nav-item" data-view="system-view">
+                        <i class="fa-solid fa-server nav-icon"></i>
+                        <span class="nav-label">Model &amp; System</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Bottom Analyst Profile Widget -->
+            <div class="sidebar-bottom">
+                <a href="/apidocs/" target="_blank" class="api-docs-link" title="Open Interactive OpenAPI Swagger Specs">
+                    <i class="fa-solid fa-book-open"></i> API Docs (Swagger)
+                </a>
+                <div class="user-profile">
+                    <div class="avatar-circle">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Analyst</span>
+                        <span class="user-role">Telecom Churn Platform</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========================================================================= -->
+        <!-- MAIN CONTENT VIEWPORT                                                     -->
+        <!-- ========================================================================= -->
+        <div class="main-wrapper">
+
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-titles">
+                    <span class="welcome-kicker">Welcome back</span>
+                    <h1 class="page-title">Telecom Customer Churn Intelligence</h1>
+                    <p class="page-subtitle">Identify at-risk customers, understand key drivers, and simulate retention strategies using machine learning.</p>
+                </div>
+                <div class="header-controls">
+                    <!-- Global Search -->
+                    <div class="global-search-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Search customers, segments, or insights..." aria-label="Search">
+                    </div>
+                    <!-- Notification Bell -->
+                    <button class="header-btn bell-btn" title="Notifications" aria-label="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    <!-- User Avatar -->
+                    <div class="header-avatar" title="Signed in as Analyst">A</div>
+                    <!-- Date Filter Pill -->
+                    <div class="date-filter-pill">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span>Jan 1, 2024 - Dec 31, 2024</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Scrollable Content Container -->
+            <main class="content-body">
+
+                <!-- ================================================================= -->
+                <!-- VIEW 1: OVERVIEW DASHBOARD                                        -->
+                <!-- ================================================================= -->
+                <section id="overview-view" class="view-panel active">
+                    <!-- Top Row 4 KPI Cards -->
+                    <div class="kpi-grid">
+                        <!-- KPI 1: Total Customers -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <div class="kpi-icon-box blue-box">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <div class="kpi-meta">
+                                    <span class="kpi-value" id="kpiTotalCustomers">7,043</span>
+                                    <span class="kpi-label">Total Customers</span>
+                                </div>
+                            </div>
+                            <div class="kpi-footer">
+                                <span class="trend-badge green-badge">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> +12% vs last period
+                                </span>
+                                <div class="kpi-sparkline" id="sparklineTotalCustomers"></div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 2: At Risk of Churn -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <div class="kpi-icon-box red-box">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div class="kpi-meta">
+                                    <span class="kpi-value" id="kpiAtRisk">1,869</span>
+                                    <span class="kpi-label">At Risk of Churn</span>
+                                </div>
+                            </div>
+                            <div class="kpi-footer">
+                                <span class="trend-badge red-badge">
+                                    26.5% risk rate
+                                </span>
+                                <div class="kpi-sparkline" id="sparklineAtRisk"></div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 3: Monthly Revenue -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <div class="kpi-icon-box green-box">
+                                    <i class="fa-solid fa-dollar-sign"></i>
+                                </div>
+                                <div class="kpi-meta">
+                                    <span class="kpi-value" id="kpiMonthlyRevenue">$186.4K</span>
+                                    <span class="kpi-label">Monthly Revenue</span>
+                                </div>
+                            </div>
+                            <div class="kpi-footer">
+                                <span class="trend-badge green-badge">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> +8% vs last period
+                                </span>
+                                <div class="kpi-sparkline" id="sparklineMonthlyRevenue"></div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 4: Model F1 Score -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <div class="kpi-icon-box purple-box">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                </div>
+                                <div class="kpi-meta">
+                                    <span class="kpi-value" id="kpiModelF1">0.6389</span>
+                                    <span class="kpi-label">Model F1 Score</span>
+                                </div>
+                            </div>
+                            <div class="kpi-footer">
+                                <span class="trend-badge purple-badge">
+                                    Production Model v1.0.0
+                                </span>
+                                <div class="kpi-sparkline" id="sparklineModelF1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Row: Risk Distribution + Churn Risk Trends + Top Risk Factors -->
+                    <div class="analytics-grid">
+                        <!-- Card 1: Customer Risk Distribution -->
+                        <div class="chart-card risk-distribution-card">
+                            <div class="card-title-bar">
+                                <h3 class="card-title">Customer Risk Distribution</h3>
+                            </div>
+                            <div class="donut-chart-container">
+                                <div class="donut-canvas-box" id="donutRiskContainer">
+                                    <!-- Dynamic SVG Donut Chart -->
+                                    <svg class="donut-svg" viewBox="0 0 160 160">
+                                        <circle cx="80" cy="80" r="62" class="donut-track"></circle>
+                                        <circle cx="80" cy="80" r="62" class="donut-segment seg-low" stroke-dasharray="207.6 389.5" stroke-dashoffset="0"></circle>
+                                        <circle cx="80" cy="80" r="62" class="donut-segment seg-med" stroke-dasharray="110.6 389.5" stroke-dashoffset="-207.6"></circle>
+                                        <circle cx="80" cy="80" r="62" class="donut-segment seg-high" stroke-dasharray="71.3 389.5" stroke-dashoffset="-318.2"></circle>
+                                    </svg>
+                                    <div class="donut-center-text">
+                                        <span class="donut-number">7,043</span>
+                                        <span class="donut-sublabel">Customers</span>
+                                    </div>
+                                </div>
+                                <div class="donut-legend-table">
+                                    <div class="legend-row">
+                                        <div class="legend-label-col">
+                                            <span class="dot-indicator dot-red"></span>
+                                            <span class="legend-text">High Risk (&ge; 0.7)</span>
+                                        </div>
+                                        <span class="legend-pct">18.3%</span>
+                                        <span class="legend-count">1,288</span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <div class="legend-label-col">
+                                            <span class="dot-indicator dot-amber"></span>
+                                            <span class="legend-text">Medium Risk (0.3-0.7)</span>
+                                        </div>
+                                        <span class="legend-pct">28.4%</span>
+                                        <span class="legend-count">2,001</span>
+                                    </div>
+                                    <div class="legend-row">
+                                        <div class="legend-label-col">
+                                            <span class="dot-indicator dot-green"></span>
+                                            <span class="legend-text">Low Risk (&lt; 0.3)</span>
+                                        </div>
+                                        <span class="legend-pct">53.3%</span>
+                                        <span class="legend-count">3,754</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Churn Risk Trends -->
+                        <div class="chart-card churn-trends-card">
+                            <div class="card-title-bar">
+                                <h3 class="card-title">Churn Risk Trends</h3>
+                                <div class="chart-legend-top">
+                                    <span class="legend-item"><span class="legend-line line-green"></span> Churn Rate</span>
+                                    <span class="legend-item"><span class="legend-line line-red"></span> High Risk Customers</span>
+                                </div>
+                            </div>
+                            <div class="trends-chart-container" id="churnTrendsSvgContainer">
+                                <!-- Dynamic Dual Line SVG Chart -->
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Top Risk Factors -->
+                        <div class="chart-card top-factors-card">
+                            <div class="card-title-bar">
+                                <h3 class="card-title">Top Risk Factors</h3>
+                            </div>
+                            <div class="factors-list" id="factorsListContainer">
+                                <div class="factor-row">
+                                    <div class="factor-label-row">
+                                        <span class="factor-name">Month-to-month contract</span>
+                                        <span class="factor-pct">42.1%</span>
+                                    </div>
+                                    <div class="factor-bar-track">
+                                        <div class="factor-bar-fill" style="width: 42.1%; background: #EF4444;"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-row">
+                                    <div class="factor-label-row">
+                                        <span class="factor-name">Tenure &lt; 6 months</span>
+                                        <span class="factor-pct">28.3%</span>
+                                    </div>
+                                    <div class="factor-bar-track">
+                                        <div class="factor-bar-fill" style="width: 28.3%; background: #F59E0B;"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-row">
+                                    <div class="factor-label-row">
+                                        <span class="factor-name">High monthly charges</span>
+                                        <span class="factor-pct">24.7%</span>
+                                    </div>
+                                    <div class="factor-bar-track">
+                                        <div class="factor-bar-fill" style="width: 24.7%; background: #EAB308;"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-row">
+                                    <div class="factor-label-row">
+                                        <span class="factor-name">No online security</span>
+                                        <span class="factor-pct">18.9%</span>
+                                    </div>
+                                    <div class="factor-bar-track">
+                                        <div class="factor-bar-fill" style="width: 18.9%; background: #14B8A6;"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-row">
+                                    <div class="factor-label-row">
+                                        <span class="factor-name">No tech support</span>
+                                        <span class="factor-pct">16.4%</span>
+                                    </div>
+                                    <div class="factor-bar-track">
+                                        <div class="factor-bar-fill" style="width: 16.4%; background: #3B82F6;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================= -->
+                <!-- VIEW 2: CUSTOMER EXPLORER                                         -->
+                <!-- ================================================================= -->
+                <section id="explorer-view" class="view-panel">
+                    <div class="panel-header">
+                        <div class="panel-header-title">
+                            <h2>Customer Explorer</h2>
+                            <p class="panel-subtitle">Search, filter, and analyze customer risk profiles.</p>
+                        </div>
+                    </div>
+
+                    <!-- Filters Control Bar -->
+                    <div class="explorer-filters-card">
+                        <div class="filter-group search-filter">
+                            <i class="fa-solid fa-magnifying-glass filter-icon"></i>
+                            <input type="text" id="explorerSearchInput" placeholder="Search Customers..." aria-label="Search Customers">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" for="filterRiskLevel">Risk Level</label>
+                            <select id="filterRiskLevel" class="filter-select">
+                                <option value="All" selected>All</option>
+                                <option value="High">High Risk</option>
+                                <option value="Medium">Medium Risk</option>
+                                <option value="Low">Low Risk</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" for="filterContract">Contract Type</label>
+                            <select id="filterContract" class="filter-select">
+                                <option value="All" selected>All</option>
+                                <option value="Month-to-month">Month-to-month</option>
+                                <option value="One year">One year</option>
+                                <option value="Two year">Two year</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" for="filterPayment">Payment Method</label>
+                            <select id="filterPayment" class="filter-select">
+                                <option value="All" selected>All</option>
+                                <option value="Electronic check">Electronic check</option>
+                                <option value="Mailed check">Mailed check</option>
+                                <option value="Bank transfer">Bank transfer (automatic)</option>
+                                <option value="Credit card">Credit card (automatic)</option>
+                            </select>
+                        </div>
+                        <button id="explorerResetBtn" class="secondary-btn" title="Reset all filters">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Customers Table Card -->
+                    <div class="table-card">
+                        <div class="table-responsive">
+                            <table class="data-table" id="customersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Customer ID</th>
+                                        <th>Gender</th>
+                                        <th>Tenure</th>
+                                        <th>Contract</th>
+                                        <th>Monthly Charges</th>
+                                        <th>Total Charges</th>
+                                        <th>Churn Risk</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customersTableBody">
+                                    <!-- Populated dynamically via JS -->
+                                    <tr>
+                                        <td colspan="8" class="text-center py-4 text-secondary">
+                                            <i class="fa-solid fa-spinner fa-spin"></i> Loading customer directory...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination Footer -->
+                        <div class="table-pagination-bar">
+                            <span class="pagination-info" id="paginationInfo">Showing 1-5 of 7,043 customers</span>
+                            <div class="pagination-controls" id="paginationControls">
+                                <button class="page-btn" id="prevPageBtn" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                                <div class="page-numbers" id="pageNumbersContainer">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <span class="page-ellipsis">...</span>
+                                    <button class="page-btn">1,409</button>
+                                </div>
+                                <button class="page-btn" id="nextPageBtn"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================= -->
+                <!-- VIEW 3: CUSTOMER ANALYSIS (SINGLE PREDICTION & DRIVERS)           -->
+                <!-- ================================================================= -->
+                <section id="analysis-view" class="view-panel">
+                    <div class="panel-header">
+                        <div class="panel-header-title">
+                            <h2>Customer Analysis</h2>
+                            <p class="panel-subtitle">Detailed risk assessment and predictive feature attribution for individual customer accounts.</p>
+                        </div>
+                    </div>
+
+                    <div class="analysis-grid-layout">
+                        <!-- Left: Customer Information Form Card -->
+                        <div class="form-panel-card">
+                            <div class="panel-card-header">
+                                <h3>Customer Information</h3>
+                                <div class="preset-buttons">
+                                    <button type="button" class="preset-pill" id="loadPresetHighRisk" title="Populate high risk profile">High Risk Preset</button>
+                                    <button type="button" class="preset-pill" id="loadPresetLowRisk" title="Populate low risk profile">Low Risk Preset</button>
+                                </div>
+                            </div>
+
+                            <form id="singleCustomerForm">
+                                <div class="form-grid-2col">
+                                    <div class="field-group">
+                                        <label for="formGender">Gender</label>
+                                        <select id="formGender" name="gender" class="form-select">
+                                            <option value="Female" selected>Female</option>
+                                            <option value="Male">Male</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formSenior">Senior Citizen</label>
+                                        <select id="formSenior" name="senior_citizen" class="form-select">
+                                            <option value="No" selected>No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formPartner">Partner</label>
+                                        <select id="formPartner" name="partner" class="form-select">
+                                            <option value="Yes" selected>Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formDependents">Dependents</label>
+                                        <select id="formDependents" name="dependents" class="form-select">
+                                            <option value="No" selected>No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formTenure">Tenure (months)</label>
+                                        <input type="number" id="formTenure" name="tenure" class="form-input" min="0" max="72" value="12" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formContract">Contract Type</label>
+                                        <select id="formContract" name="contract" class="form-select">
+                                            <option value="Month-to-month" selected>Month-to-month</option>
+                                            <option value="One year">One year</option>
+                                            <option value="Two year">Two year</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formMonthlyCharges">Monthly Charges ($)</label>
+                                        <input type="number" id="formMonthlyCharges" name="monthly_charges" class="form-input" min="0" step="0.25" value="65.50" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="formPaymentMethod">Payment Method</label>
+                                        <select id="formPaymentMethod" name="payment_method" class="form-select">
+                                            <option value="Electronic check" selected>Electronic check</option>
+                                            <option value="Mailed check">Mailed check</option>
+                                            <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                                            <option value="Credit card (automatic)">Credit card (automatic)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Collapsible Additional Service Features -->
+                                <details class="advanced-services-drawer">
+                                    <summary class="drawer-summary">
+                                        <span><i class="fa-solid fa-layer-group"></i> Additional Services &amp; Line Details</span>
+                                        <i class="fa-solid fa-chevron-down drawer-chevron"></i>
+                                    </summary>
+                                    <div class="form-grid-2col drawer-content">
+                                        <div class="field-group">
+                                            <label for="formPhoneService">Phone Service</label>
+                                            <select id="formPhoneService" name="phone_service" class="form-select">
+                                                <option value="Yes" selected>Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formMultipleLines">Multiple Lines</label>
+                                            <select id="formMultipleLines" name="multiple_lines" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No phone service">No phone service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formInternetService">Internet Service</label>
+                                            <select id="formInternetService" name="internet_service" class="form-select">
+                                                <option value="Fiber optic" selected>Fiber optic</option>
+                                                <option value="DSL">DSL</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formOnlineSecurity">Online Security</label>
+                                            <select id="formOnlineSecurity" name="online_security" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formOnlineBackup">Online Backup</label>
+                                            <select id="formOnlineBackup" name="online_backup" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formDeviceProtection">Device Protection</label>
+                                            <select id="formDeviceProtection" name="device_protection" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formTechSupport">Tech Support</label>
+                                            <select id="formTechSupport" name="tech_support" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formStreamingTV">Streaming TV</label>
+                                            <select id="formStreamingTV" name="streaming_tv" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formStreamingMovies">Streaming Movies</label>
+                                            <select id="formStreamingMovies" name="streaming_movies" class="form-select">
+                                                <option value="No" selected>No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No internet service">No internet service</option>
+                                            </select>
+                                        </div>
+                                        <div class="field-group">
+                                            <label for="formPaperless">Paperless Billing</label>
+                                            <select id="formPaperless" name="paperless_billing" class="form-select">
+                                                <option value="Yes" selected>Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <button type="submit" id="predictSubmitBtn" class="primary-btn btn-block mt-4">
+                                    <i class="fa-solid fa-bolt"></i> Predict Churn Risk
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Right: Prediction Results Card -->
+                        <div class="results-panel-card">
+                            <div class="panel-card-header">
+                                <h3>Prediction Results</h3>
+                                <span class="badge-subtle" id="activeModelBadge">XGBoost v1.0.0 &bull; Thresh 0.3236</span>
+                            </div>
+
+                            <div class="results-body">
+                                <!-- Circular Gauge Result -->
+                                <div class="gauge-display-box">
+                                    <div class="radial-gauge-container">
+                                        <svg class="radial-gauge-svg" viewBox="0 0 160 160">
+                                            <circle cx="80" cy="80" r="64" class="gauge-bg-circle"></circle>
+                                            <circle cx="80" cy="80" r="64" class="gauge-fill-circle" id="gaugeFillCircle" stroke="#EF4444" stroke-dasharray="402.1" stroke-dashoffset="111"></circle>
+                                        </svg>
+                                        <div class="gauge-text-overlay">
+                                            <span class="gauge-percentage" id="gaugePctText">72.4%</span>
+                                        </div>
+                                    </div>
+                                    <div class="verdict-box">
+                                        <span class="risk-tier-pill red-pill" id="riskTierBadge">High Risk</span>
+                                        <p class="verdict-summary" id="verdictSummaryText">This customer is likely to churn. Consider proactive retention strategies.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Top Contributing Factors -->
+                                <div class="contributing-factors-section">
+                                    <h4 class="section-title">Top Contributing Factors</h4>
+                                    <div class="factor-tags-list" id="attributionList">
+                                        <div class="attribution-item">
+                                            <div class="attr-left">
+                                                <span class="dot-indicator dot-red"></span>
+                                                <span class="attr-name">Month-to-month contract</span>
+                                            </div>
+                                            <span class="attr-score attr-pos">+0.28</span>
+                                        </div>
+                                        <div class="attribution-item">
+                                            <div class="attr-left">
+                                                <span class="dot-indicator dot-red"></span>
+                                                <span class="attr-name">Tenure &lt; 12 months</span>
+                                            </div>
+                                            <span class="attr-score attr-pos">+0.22</span>
+                                        </div>
+                                        <div class="attribution-item">
+                                            <div class="attr-left">
+                                                <span class="dot-indicator dot-red"></span>
+                                                <span class="attr-name">High monthly charges</span>
+                                            </div>
+                                            <span class="attr-score attr-pos">+0.18</span>
+                                        </div>
+                                        <div class="attribution-item">
+                                            <div class="attr-left">
+                                                <span class="dot-indicator dot-red"></span>
+                                                <span class="attr-name">No online security</span>
+                                            </div>
+                                            <span class="attr-score attr-pos">+0.15</span>
+                                        </div>
+                                        <div class="attribution-item">
+                                            <div class="attr-left">
+                                                <span class="dot-indicator dot-red"></span>
+                                                <span class="attr-name">Electronic check payment</span>
+                                            </div>
+                                            <span class="attr-score attr-pos">+0.12</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Retention Recommendations -->
+                                <div class="recommendations-box">
+                                    <h4 class="section-title">Recommended Interventions</h4>
+                                    <ul class="recs-list" id="recsListContainer">
+                                        <li>Proactively offer a 12-month contract lock-in with a 15% discount.</li>
+                                        <li>Enroll customer in complimentary online security &amp; tech support trial.</li>
+                                        <li>Switch payment method to automatic card or bank debit with a $5 recurring bill credit.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Scientific Disclaimer -->
+                                <p class="model-disclaimer" id="resultDisclaimer">
+                                    Statistical risk prediction. Model explanations show statistical correlation and do not imply causal mechanisms.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================= -->
+                <!-- VIEW 4: BATCH INTELLIGENCE                                        -->
+                <!-- ================================================================= -->
+                <section id="batch-view" class="view-panel">
+                    <div class="panel-header">
+                        <div class="panel-header-title">
+                            <h2>Batch Intelligence</h2>
+                            <p class="panel-subtitle">Upload CSV lists of customer accounts for batch scoring, risk tier assignment, and revenue at risk analysis.</p>
+                        </div>
+                    </div>
+
+                    <div class="batch-grid-layout">
+                        <!-- Left Column: Upload Dropzone Card -->
+                        <div class="batch-upload-card">
+                            <div class="panel-card-header">
+                                <h3>Upload Customer List (CSV)</h3>
+                            </div>
+                            <div class="dropzone-area" id="batchDropzone">
+                                <input type="file" id="batchFileInput" accept=".csv" class="dropzone-file-input">
+                                <div class="dropzone-content">
+                                    <div class="dropzone-icon-box">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    </div>
+                                    <span class="dropzone-main-text">Drag and drop your CSV file here or click to browse</span>
+                                    <span class="dropzone-sub-text">Supports CSV files with the same structure as the training data</span>
+                                </div>
+                            </div>
+                            <div class="sample-download-row">
+                                <a href="/api/sample_csv" class="sample-csv-link" download="telecom_customers_sample.csv">
+                                    <i class="fa-solid fa-file-arrow-down"></i> Download Sample CSV
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Results Summary Cards -->
+                        <div class="batch-metrics-card">
+                            <div class="panel-card-header">
+                                <h3>Results Summary</h3>
+                            </div>
+                            <div class="summary-cards-row">
+                                <div class="summary-mini-card">
+                                    <span class="summary-mini-value blue-text" id="batchProcessedCount">1,000</span>
+                                    <span class="summary-mini-label">Processed</span>
+                                </div>
+                                <div class="summary-mini-card">
+                                    <span class="summary-mini-value red-text" id="batchErrorsCount">0</span>
+                                    <span class="summary-mini-label">Errors</span>
+                                </div>
+                                <div class="summary-mini-card">
+                                    <span class="summary-mini-value gray-text" id="batchProcessingTime">2m 14s</span>
+                                    <span class="summary-mini-label">Processing Time</span>
+                                </div>
+                            </div>
+
+                            <button id="batchDownloadBtn" class="primary-btn btn-block mt-3" disabled>
+                                <i class="fa-solid fa-download"></i> Download Results
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scored Batch Results Table -->
+                    <div class="table-card mt-4">
+                        <div class="card-title-bar">
+                            <h3 class="card-title">Scored Customer Preview</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table" id="batchResultsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Customer ID</th>
+                                        <th>Churn Risk</th>
+                                        <th>Risk Level</th>
+                                        <th>Prediction</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="batchTableBody">
+                                    <tr>
+                                        <td>7590-VHVEG</td>
+                                        <td><span class="score-indicator"><span class="dot-indicator dot-red"></span> 0.04</span></td>
+                                        <td><span class="risk-tier-pill green-pill">Low</span></td>
+                                        <td><span class="pred-text no-churn"><i class="fa-solid fa-circle-check"></i> No Churn</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5575-GNVDE</td>
+                                        <td><span class="score-indicator"><span class="dot-indicator dot-red"></span> 0.12</span></td>
+                                        <td><span class="risk-tier-pill green-pill">Low</span></td>
+                                        <td><span class="pred-text no-churn"><i class="fa-solid fa-circle-check"></i> No Churn</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3668-QPYBK</td>
+                                        <td><span class="score-indicator"><span class="dot-indicator dot-red"></span> 0.78</span></td>
+                                        <td><span class="risk-tier-pill red-pill">High</span></td>
+                                        <td><span class="pred-text churn"><i class="fa-solid fa-triangle-exclamation"></i> Churn</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>7795-CFOCW</td>
+                                        <td><span class="score-indicator"><span class="dot-indicator dot-red"></span> 0.28</span></td>
+                                        <td><span class="risk-tier-pill green-pill">Low</span></td>
+                                        <td><span class="pred-text no-churn"><i class="fa-solid fa-circle-check"></i> No Churn</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>9237-HQITU</td>
+                                        <td><span class="score-indicator"><span class="dot-indicator dot-amber"></span> 0.62</span></td>
+                                        <td><span class="risk-tier-pill amber-pill">Medium</span></td>
+                                        <td><span class="pred-text churn"><i class="fa-solid fa-triangle-exclamation"></i> Churn</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================= -->
+                <!-- VIEW 5: RETENTION SIMULATOR                                       -->
+                <!-- ================================================================= -->
+                <section id="simulator-view" class="view-panel">
+                    <div class="panel-header">
+                        <div class="panel-header-title">
+                            <h2>Retention Simulator</h2>
+                            <p class="panel-subtitle">Evaluate hypothetical customer retention interventions and ROI before committing budget.</p>
+                        </div>
+                    </div>
+
+                    <div class="simulator-grid-layout">
+                        <!-- Left: Campaign Parameters Form -->
+                        <div class="simulator-params-card">
+                            <div class="panel-card-header">
+                                <h3>Campaign Parameters</h3>
+                            </div>
+
+                            <form id="simulatorForm">
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="simDiscount">Discount Percentage</label>
+                                        <span class="slider-val" id="valDiscount">20%</span>
+                                    </div>
+                                    <input type="range" id="simDiscount" class="range-slider" min="0" max="50" step="5" value="20">
+                                </div>
+
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="simExtension">Contract Extension (months)</label>
+                                        <span class="slider-val" id="valExtension">12</span>
+                                    </div>
+                                    <input type="range" id="simExtension" class="range-slider" min="0" max="24" step="1" value="12">
+                                </div>
+
+                                <div class="field-group">
+                                    <label for="simSegment">Target Segment</label>
+                                    <select id="simSegment" class="form-select">
+                                        <option value="high" selected>High Risk Customers (&ge; 0.7)</option>
+                                        <option value="medium_high">Medium &amp; High Risk (&ge; 0.3)</option>
+                                        <option value="all_risk">All At-Risk Customers (Threshold &ge; 0.3236)</option>
+                                    </select>
+                                </div>
+
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <label for="simAcceptance">Estimated Acceptance Rate</label>
+                                        <span class="slider-val" id="valAcceptance">30%</span>
+                                    </div>
+                                    <input type="range" id="simAcceptance" class="range-slider" min="5" max="100" step="5" value="30">
+                                </div>
+
+                                <button type="submit" id="runSimBtn" class="primary-btn btn-block mt-4">
+                                    <i class="fa-solid fa-play"></i> Run Simulation
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Right: Projected Impact Cards -->
+                        <div class="simulator-impact-card">
+                            <div class="panel-card-header">
+                                <h3>Projected Impact</h3>
+                            </div>
+
+                            <div class="impact-grid">
+                                <div class="impact-kpi-card">
+                                    <div class="impact-icon-box blue-box">
+                                        <i class="fa-solid fa-user-check"></i>
+                                    </div>
+                                    <div class="impact-meta">
+                                        <span class="impact-val" id="simRetainedCount">425</span>
+                                        <span class="impact-label">Customers Retained</span>
+                                    </div>
+                                </div>
+
+                                <div class="impact-kpi-card">
+                                    <div class="impact-icon-box green-box">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="impact-meta">
+                                        <span class="impact-val" id="simRevenueSaved">$42.3K</span>
+                                        <span class="impact-label">Monthly Revenue Saved</span>
+                                    </div>
+                                </div>
+
+                                <div class="impact-kpi-card">
+                                    <div class="impact-icon-box amber-box">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                    </div>
+                                    <div class="impact-meta">
+                                        <span class="impact-val" id="simChurnReduction">15.6%</span>
+                                        <span class="impact-label">Churn Rate Reduction</span>
+                                    </div>
+                                </div>
+
+                                <div class="impact-kpi-card">
+                                    <div class="impact-icon-box green-box">
+                                        <i class="fa-solid fa-arrow-trend-up"></i>
+                                    </div>
+                                    <div class="impact-meta">
+                                        <span class="impact-val" id="simRoi">312%</span>
+                                        <span class="impact-label">Estimated ROI</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scenario-details-box mt-4">
+                                <h4 class="section-title">Scenario Economics</h4>
+                                <div class="detail-row">
+                                    <span>Targeted Cohort Size</span>
+                                    <span id="simTargetSize">1,416 customers</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Campaign Discount Budget</span>
+                                    <span id="simBudgetCost">$13,540 / mo</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Gross Exposure Protected</span>
+                                    <span id="simGrossProtected">$55,840 / mo</span>
+                                </div>
+                                <div class="detail-row highlight-row">
+                                    <span>Net Monthly Advantage</span>
+                                    <span id="simNetAdvantage" class="green-text">+$42,300 / mo</span>
+                                </div>
+                            </div>
+
+                            <p class="model-disclaimer mt-3">
+                                Simulation models hypothetical outcomes based on user-supplied assumptions. Actual retention campaign results depend on customer elasticity, competitive pricing, and service quality.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ================================================================= -->
+                <!-- VIEW 6: MODEL & SYSTEM                                            -->
+                <!-- ================================================================= -->
+                <section id="system-view" class="view-panel">
+                    <div class="panel-header">
+                        <div class="panel-header-title">
+                            <h2>Model &amp; System</h2>
+                            <p class="panel-subtitle">Production model health, evaluation benchmarks, population drift, and system telemetry.</p>
+                        </div>
+                    </div>
+
+                    <div class="system-grid-layout">
+                        <!-- Top Left: Model Performance -->
+                        <div class="system-section-card">
+                            <div class="panel-card-header">
+                                <div>
+                                    <h3>Model Performance</h3>
+                                    <div class="active-model-title mt-1" style="font-size: 12.5px; color: var(--color-primary); font-weight: 600;">
+                                        <i class="fa-solid fa-microchip"></i> Active Model: <span id="sysActiveModelHeader">XGBoost Classifier (Canonical v1.0.0)</span>
+                                    </div>
+                                </div>
+                                <span class="badge-subtle"><i class="fa-solid fa-file-code"></i> Models/churn_model.pkl</span>
+                            </div>
+                            <div class="perf-cards-row">
+                                <div class="perf-mini-card">
+                                    <span class="perf-val" id="sysF1">0.6389</span>
+                                    <span class="perf-label">F1 Score</span>
+                                </div>
+                                <div class="perf-mini-card">
+                                    <span class="perf-val" id="sysRoc">0.8421</span>
+                                    <span class="perf-label">ROC AUC</span>
+                                </div>
+                                <div class="perf-mini-card">
+                                    <span class="perf-val" id="sysPrec">0.6543</span>
+                                    <span class="perf-label">Precision</span>
+                                </div>
+                                <div class="perf-mini-card">
+                                    <span class="perf-val" id="sysRec">0.6234</span>
+                                    <span class="perf-label">Recall</span>
+                                </div>
+                            </div>
+
+                            <!-- Service Health Subcard -->
+                            <div class="service-health-subcard mt-4">
+                                <h4>Service Health &amp; Model Runtime</h4>
+                                <div class="health-grid">
+                                    <div class="health-item">
+                                        <span class="health-label">API Status</span>
+                                        <span class="health-pill green-pill"><i class="fa-solid fa-circle"></i> Healthy</span>
+                                    </div>
+                                    <div class="health-item">
+                                        <span class="health-label">Model Engine</span>
+                                        <span class="health-pill purple-pill" id="sysActiveModelPill"><i class="fa-solid fa-microchip"></i> XGBoost v1.0.0</span>
+                                    </div>
+                                    <div class="health-item">
+                                        <span class="health-label">Model Pipeline</span>
+                                        <span class="health-pill blue-pill"><i class="fa-solid fa-circle"></i> Loaded</span>
+                                    </div>
+                                    <div class="health-item">
+                                        <span class="health-label">Decision Threshold</span>
+                                        <span class="health-pill amber-pill"><i class="fa-solid fa-bullseye"></i> 0.3236</span>
+                                    </div>
+                                    <div class="health-item">
+                                        <span class="health-label">Database</span>
+                                        <span class="health-pill green-pill"><i class="fa-solid fa-circle"></i> Connected</span>
+                                    </div>
+                                    <div class="health-item">
+                                        <span class="health-label">Last Check</span>
+                                        <span class="health-text" id="sysLastCheck">Just now</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Right: Feature Drift Monitoring -->
+                        <div class="system-section-card">
+                            <div class="panel-card-header">
+                                <h3>Feature Drift Monitoring</h3>
+                                <div class="drift-legend">
+                                    <span class="legend-item"><span class="legend-bar bar-drift-blue"></span> Current PSI</span>
+                                    <span class="legend-item"><span class="legend-line line-red-dashed"></span> Drift Threshold (0.25)</span>
+                                </div>
+                            </div>
+                            <div class="drift-chart-container" id="driftChartSvgContainer">
+                                <!-- Dynamic Drift Bars SVG -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom: System Information 4 Cards -->
+                    <div class="system-info-card mt-4">
+                        <div class="panel-card-header">
+                            <h3>System Information</h3>
+                        </div>
+                        <div class="sysinfo-cards-row">
+                            <div class="sysinfo-mini-card">
+                                <span class="sysinfo-val green-text" id="sysUptime">99.9%</span>
+                                <span class="sysinfo-label">Uptime</span>
+                            </div>
+                            <div class="sysinfo-mini-card">
+                                <span class="sysinfo-val blue-text" id="sysResponseTime">124 ms</span>
+                                <span class="sysinfo-label">Response Time</span>
+                            </div>
+                            <div class="sysinfo-mini-card">
+                                <span class="sysinfo-val amber-text" id="sysMemory">587 MB</span>
+                                <span class="sysinfo-label">Memory Usage</span>
+                            </div>
+                            <div class="sysinfo-mini-card">
+                                <span class="sysinfo-val green-text" id="sysCpu">16.2%</span>
+                                <span class="sysinfo-label">CPU Usage</span>
+                            </div>
+                        </div>
+
+                        <div class="model-meta-footer mt-4">
+                            <span><strong>Active Model:</strong> <span id="sysActiveModelFooter">XGBoost (Extreme Gradient Boosting)</span></span>
+                            <span class="divider">|</span>
+                            <span><strong>Artifact:</strong> Models/churn_model.pkl</span>
+                            <span class="divider">|</span>
+                            <span><strong>Model Version:</strong> 1.0.0</span>
+                            <span class="divider">|</span>
+                            <span><strong>Decision Threshold:</strong> 0.3236</span>
+                            <span class="divider">|</span>
+                            <span><strong>Last Trained:</strong> Jan 15, 2024</span>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div id="toastNotification" class="toast-popup" role="alert" aria-live="polite"></div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

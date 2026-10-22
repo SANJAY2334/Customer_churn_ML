@@ -1,0 +1,47 @@
+name: Telecom Churn ML - CI & Release Gate
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-verify:
+    name: Test Suite & Artifact Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Verify Model Artifact Integrity
+        run: |
+          python -c "
+          from src.artifact_validator import verify_artifact_integrity, perform_readiness_probe
+          res = verify_artifact_integrity()
+          print('Artifact Integrity:', res)
+          assert res.get('valid'), f'Integrity failed: {res.get(\"error\")}'
+          r_res = perform_readiness_probe()
+          print('Readiness Probe:', r_res)
+          assert r_res.get('ready'), f'Readiness probe failed: {r_res.get(\"error\")}'
+          "
+
+      - name: Run Test Suite
+        env:
+          ENVIRONMENT: testing
+          API_AUTH_ENABLED: 'false'
+        run: |
+          pytest -v --durations=10

@@ -1,0 +1,43 @@
+# ==============================================================================
+# TELECOM CHURN ML - PRODUCTION ENVIRONMENT VARIABLE REFERENCE TEMPLATE
+# DO NOT COMMIT ACTUAL SECRETS TO SOURCE CONTROL
+# ==============================================================================
+
+# Runtime Environment
+ENVIRONMENT=production
+FLASK_ENV=production
+APP_ENV=production
+
+# Server Configuration
+PORT=5000
+GUNICORN_WORKERS=4
+GUNICORN_THREADS=2
+GUNICORN_WORKER_CLASS=gthread
+MAX_CONTENT_LENGTH=16777216
+
+# Security & Authentication
+API_AUTH_ENABLED=true
+# Injected at runtime from AWS Secrets Manager / Vault (e.g. arn:aws:secretsmanager:...:secret:telecom/churn/prod_api_key)
+CHURN_API_KEY={{resolve:secretsmanager:telecom/churn/prod:SecretString:API_KEY}}
+API_KEY={{resolve:secretsmanager:telecom/churn/prod:SecretString:API_KEY}}
+
+# Rate Limiting
+# Use "shared" for single-node SQLite WAL; use "redis" when running > 1 container replica
+RATE_LIMIT_STORAGE=shared
+RATE_LIMIT_PER_MINUTE=60
+RATE_LIMIT_DB_PATH=/tmp/telecom_rate_limits.sqlite3
+# For Redis multi-node: rediss://user:password@elasticache-endpoint:6379/0
+REDIS_URL=
+
+# Model Configuration
+ACTIVE_MODEL_KEY=xgboost
+CHURN_DECISION_THRESHOLD=0.3236
+EXPECTED_ARTIFACT_SHA256=a9f0053a700de50daab7c453f4bd690d7cd09ad0c10927240234a4895d791363
+
+# CORS Configuration
+# Comma-separated allowed origins (e.g. https://dashboard.telecom.example.com)
+CORS_ALLOWED_ORIGINS=https://churn.telecom.example.com
+
+# Telemetry & Monitoring
+LOG_LEVEL=INFO
+METRICS_ENABLED=true
